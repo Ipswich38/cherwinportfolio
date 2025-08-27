@@ -22,7 +22,12 @@ const projects = [
   { id: 17, title: 'Project Rho', color: 'from-slate-500 to-gray-500' },
   { id: 18, title: 'Project Sigma', color: 'from-zinc-500 to-slate-500' },
   { id: 19, title: 'Project Tau', color: 'from-neutral-500 to-gray-500' },
-  { id: 20, title: 'Project Phi', color: 'from-pink-500 to-rose-500' }
+  { id: 20, title: 'Project Phi', color: 'from-pink-500 to-rose-500' },
+  { id: 21, title: 'Project Chi', color: 'from-emerald-400 to-cyan-400' },
+  { id: 22, title: 'Project Psi', color: 'from-violet-400 to-purple-400' },
+  { id: 23, title: 'Project Omega', color: 'from-orange-400 to-red-400' },
+  { id: 24, title: 'Project Beta II', color: 'from-blue-400 to-indigo-400' },
+  { id: 25, title: 'Project Final', color: 'from-rose-400 to-pink-400' }
 ];
 
 export default function Home() {
@@ -37,11 +42,35 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  const getRowCol = (index: number) => {
+    const row = Math.floor(index / 5);
+    const col = index % 5;
+    return { row, col };
+  };
+
   const getSizeClasses = (index: number) => {
     const baseClasses = "relative overflow-hidden cursor-pointer transition-all duration-300 ease-out";
     
     if (hoveredIndex === index) {
-      return `${baseClasses} col-span-2 row-span-2 z-20`;
+      const { row, col } = getRowCol(index);
+      
+      // Check if we're on the bottom row (row 4) or right column (col 4)
+      const isBottomRow = row === 4;
+      const isRightCol = col === 4;
+      
+      if (isBottomRow && isRightCol) {
+        // Bottom-right corner: expand up and left
+        return `${baseClasses} col-span-2 row-span-2 z-20 col-start-4 row-start-4`;
+      } else if (isBottomRow) {
+        // Bottom row: expand upward
+        return `${baseClasses} col-span-2 row-span-2 z-20 row-start-4`;
+      } else if (isRightCol) {
+        // Right column: expand leftward
+        return `${baseClasses} col-span-2 row-span-2 z-20 col-start-4`;
+      } else {
+        // Normal expansion down and right
+        return `${baseClasses} col-span-2 row-span-2 z-20`;
+      }
     }
     
     if (hoveredIndex !== null && hoveredIndex !== index) {
@@ -60,7 +89,7 @@ export default function Home() {
         
         <div 
           className={`
-            grid grid-cols-8 grid-rows-8 gap-0
+            grid grid-cols-5 grid-rows-5 gap-0
             transition-all duration-300 ease-in-out
             ${isAnimating ? 'animate-pulse' : ''}
             border-4 border-slate-700 overflow-hidden
