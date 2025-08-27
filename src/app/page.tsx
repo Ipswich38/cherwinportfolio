@@ -38,7 +38,7 @@ export default function Home() {
   }, []);
 
   const getSizeClasses = (size: string, index: number) => {
-    const baseClasses = "relative overflow-hidden rounded-lg cursor-pointer transition-all duration-500 ease-out";
+    const baseClasses = "relative overflow-hidden cursor-pointer transition-all duration-500 ease-out";
     
     if (hoveredIndex === index) {
       return `${baseClasses} col-span-2 row-span-2 z-20 shadow-2xl scale-105`;
@@ -67,7 +67,7 @@ export default function Home() {
         
         <div 
           className={`
-            grid grid-cols-8 grid-rows-6 gap-2 auto-rows-fr
+            grid grid-cols-8 grid-rows-6 gap-0 auto-rows-fr
             transition-all duration-1000 ease-in-out
             ${isAnimating ? 'animate-pulse' : ''}
           `}
@@ -103,7 +103,7 @@ export default function Home() {
                   #{project.id}
                 </div>
 
-                <div className="absolute inset-0 border-2 border-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 border-2 border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </div>
           ))}
