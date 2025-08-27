@@ -1,54 +1,113 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const colors = [
-  'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500',
-  'bg-purple-500', 'bg-pink-500', 'bg-indigo-500', 'bg-teal-500',
-  'bg-orange-500', 'bg-cyan-500', 'bg-lime-500', 'bg-amber-500',
-  'bg-emerald-500', 'bg-violet-500', 'bg-rose-500', 'bg-sky-500',
-  'bg-fuchsia-500', 'bg-slate-500', 'bg-zinc-500', 'bg-neutral-500'
+const projects = [
+  { id: 1, title: 'Project Alpha', color: 'from-red-500 to-pink-500', size: 'large' },
+  { id: 2, title: 'Project Beta', color: 'from-blue-500 to-cyan-500', size: 'medium' },
+  { id: 3, title: 'Project Gamma', color: 'from-green-500 to-teal-500', size: 'small' },
+  { id: 4, title: 'Project Delta', color: 'from-yellow-500 to-orange-500', size: 'medium' },
+  { id: 5, title: 'Project Epsilon', color: 'from-purple-500 to-violet-500', size: 'large' },
+  { id: 6, title: 'Project Zeta', color: 'from-indigo-500 to-blue-500', size: 'small' },
+  { id: 7, title: 'Project Eta', color: 'from-teal-500 to-green-500', size: 'medium' },
+  { id: 8, title: 'Project Theta', color: 'from-orange-500 to-red-500', size: 'small' },
+  { id: 9, title: 'Project Iota', color: 'from-cyan-500 to-blue-500', size: 'large' },
+  { id: 10, title: 'Project Kappa', color: 'from-lime-500 to-green-500', size: 'small' },
+  { id: 11, title: 'Project Lambda', color: 'from-amber-500 to-yellow-500', size: 'medium' },
+  { id: 12, title: 'Project Mu', color: 'from-emerald-500 to-teal-500', size: 'small' },
+  { id: 13, title: 'Project Nu', color: 'from-violet-500 to-purple-500', size: 'medium' },
+  { id: 14, title: 'Project Xi', color: 'from-rose-500 to-pink-500', size: 'large' },
+  { id: 15, title: 'Project Omicron', color: 'from-sky-500 to-cyan-500', size: 'small' },
+  { id: 16, title: 'Project Pi', color: 'from-fuchsia-500 to-violet-500', size: 'medium' },
+  { id: 17, title: 'Project Rho', color: 'from-slate-500 to-gray-500', size: 'small' },
+  { id: 18, title: 'Project Sigma', color: 'from-zinc-500 to-slate-500', size: 'medium' },
+  { id: 19, title: 'Project Tau', color: 'from-neutral-500 to-gray-500', size: 'small' },
+  { id: 20, title: 'Project Phi', color: 'from-pink-500 to-rose-500', size: 'large' }
 ];
 
 export default function Home() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 1000);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getSizeClasses = (size: string, index: number) => {
+    const baseClasses = "relative overflow-hidden rounded-lg cursor-pointer transition-all duration-500 ease-out";
+    
+    if (hoveredIndex === index) {
+      return `${baseClasses} col-span-2 row-span-2 z-20 shadow-2xl scale-105`;
+    }
+    
+    if (hoveredIndex !== null && hoveredIndex !== index) {
+      return `${baseClasses} opacity-60 scale-95`;
+    }
+
+    switch (size) {
+      case 'large':
+        return `${baseClasses} col-span-2 row-span-2`;
+      case 'medium':
+        return `${baseClasses} col-span-2 row-span-1`;
+      default:
+        return `${baseClasses} col-span-1 row-span-1`;
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-gray-100">
-      <div 
-        className="grid grid-cols-5 grid-rows-4 w-[600px] h-[480px] border-4 border-gray-800"
-        onMouseLeave={() => setHoveredIndex(null)}
-      >
-        {colors.map((color, index) => (
-          <div
-            key={index}
-            className={`
-              ${color} 
-              transition-all 
-              duration-300 
-              ease-in-out 
-              cursor-pointer
-              flex 
-              items-center 
-              justify-center 
-              text-white 
-              font-bold 
-              text-lg
-              ${hoveredIndex === index 
-                ? 'scale-150 z-10 shadow-2xl' 
-                : hoveredIndex !== null 
-                  ? 'scale-75 opacity-70' 
-                  : 'scale-100'
-              }
-            `}
-            onMouseEnter={() => setHoveredIndex(index)}
-            style={{
-              transformOrigin: 'center',
-            }}
-          >
-            {index + 1}
-          </div>
-        ))}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-white text-center mb-8">
+          Cherwin&apos;s Portfolio
+        </h1>
+        
+        <div 
+          className={`
+            grid grid-cols-8 grid-rows-6 gap-2 auto-rows-fr
+            transition-all duration-1000 ease-in-out
+            ${isAnimating ? 'animate-pulse' : ''}
+          `}
+          style={{ height: '80vh' }}
+          onMouseLeave={() => setHoveredIndex(null)}
+        >
+          {projects.map((project, index) => (
+            <div
+              key={project.id}
+              className={getSizeClasses(project.size, index)}
+              onMouseEnter={() => setHoveredIndex(index)}
+              style={{
+                animationDelay: `${index * 50}ms`,
+              }}
+            >
+              <div className={`
+                w-full h-full bg-gradient-to-br ${project.color}
+                flex flex-col items-center justify-center
+                relative group
+              `}>
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                
+                <div className="text-center z-10 p-4">
+                  <div className="text-white font-bold text-lg mb-2">
+                    {project.title}
+                  </div>
+                  <div className="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to explore
+                  </div>
+                </div>
+
+                <div className="absolute top-2 right-2 text-white/60 text-xs">
+                  #{project.id}
+                </div>
+
+                <div className="absolute inset-0 border-2 border-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
