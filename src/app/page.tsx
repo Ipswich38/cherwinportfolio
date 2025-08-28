@@ -141,7 +141,7 @@ export default function Home() {
           
           <div 
             className={`
-              grid gap-0 rounded-3xl overflow-hidden
+              grid gap-0 overflow-hidden
               transition-all duration-300 ease-in-out
               ${isAnimating ? 'animate-pulse' : ''}
               shadow-lg elevation-2
