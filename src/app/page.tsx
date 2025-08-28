@@ -48,42 +48,68 @@ export default function Home() {
     return { row, col };
   };
 
-  const getSizeClasses = (index: number) => {
-    // Always maintain 1x1 grid position to keep 5x5 layout stable
-    const baseClasses = "col-span-1 row-span-1 cursor-pointer transition-all duration-300 ease-out";
-    
-    if (hoveredIndex !== null && hoveredIndex !== index) {
-      return `${baseClasses} opacity-60`;
-    }
-
-    return baseClasses;
+  const getSizeClasses = () => {
+    return "col-span-1 row-span-1 cursor-pointer transition-all duration-300 ease-out";
   };
 
-  const getHoverStyles = (index: number) => {
-    if (hoveredIndex !== index) return {};
-    
+  const getBoxStyles = (index: number) => {
     const { row, col } = getRowCol(index);
-    const isBottomRow = row === 4;
-    const isRightCol = col === 4;
     
-    // Calculate position to expand within bounds
-    const transform = 'scale(2)';
-    let transformOrigin = 'center';
-    
-    if (isBottomRow && isRightCol) {
-      transformOrigin = 'bottom right';
-    } else if (isBottomRow) {
-      transformOrigin = 'bottom center';
-    } else if (isRightCol) {
-      transformOrigin = 'center right';
-    } else {
-      transformOrigin = 'top left';
+    if (hoveredIndex === null) {
+      return {
+        transform: 'scale(1)',
+        transformOrigin: 'center',
+        zIndex: 1,
+      };
     }
+
+    if (hoveredIndex === index) {
+      // Expanded box
+      const isBottomRow = row === 4;
+      const isRightCol = col === 4;
+      
+      let transformOrigin = 'center';
+      if (isBottomRow && isRightCol) {
+        transformOrigin = 'bottom right';
+      } else if (isBottomRow) {
+        transformOrigin = 'bottom center';
+      } else if (isRightCol) {
+        transformOrigin = 'center right';
+      } else {
+        transformOrigin = 'top left';
+      }
+      
+      return {
+        transform: 'scale(2)',
+        transformOrigin,
+        zIndex: 20,
+      };
+    }
+
+    // Non-hovered boxes - calculate squeeze effect
+    const hoveredPos = getRowCol(hoveredIndex);
+    const distanceFromHover = Math.abs(row - hoveredPos.row) + Math.abs(col - hoveredPos.col);
+    
+    // Boxes closer to the hovered box get squeezed more
+    const maxDistance = 8; // Max possible distance in 5x5 grid
+    const squeezeIntensity = Math.max(0.3, 1 - (distanceFromHover / maxDistance) * 0.4);
+    
+    // Calculate push direction away from hovered box
+    const pushX = col === hoveredPos.col ? 0 : (col > hoveredPos.col ? 8 : -8);
+    const pushY = row === hoveredPos.row ? 0 : (row > hoveredPos.row ? 8 : -8);
+    
+    // Reduce push for boxes at edges to keep them in bounds
+    const edgeFactorX = col === 0 || col === 4 ? 0.5 : 1;
+    const edgeFactorY = row === 0 || row === 4 ? 0.5 : 1;
+    
+    const finalPushX = pushX * edgeFactorX;
+    const finalPushY = pushY * edgeFactorY;
     
     return {
-      transform,
-      transformOrigin,
-      zIndex: 20,
+      transform: `scale(${squeezeIntensity}) translate(${finalPushX}px, ${finalPushY}px)`,
+      transformOrigin: 'center',
+      zIndex: 1,
+      opacity: 0.7,
     };
   };
 
@@ -111,11 +137,11 @@ export default function Home() {
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className={getSizeClasses(index)}
+              className={getSizeClasses()}
               onMouseEnter={() => setHoveredIndex(index)}
               style={{
                 animationDelay: `${index * 50}ms`,
-                ...getHoverStyles(index),
+                ...getBoxStyles(index),
               }}
             >
               <div className={`
