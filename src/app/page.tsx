@@ -70,15 +70,16 @@ export default function Home() {
 
     const { row: hoveredRow, col: hoveredCol } = getRowCol(hoveredIndex);
     
-    // Create grid where hovered position gets more space, others get squeezed
+    // For 3x3 expansion, we need to allocate more space
+    // Total space: 600px, expanded box takes 300px, remaining 4 boxes get 75px each
     const colSizes = Array.from({ length: 5 }, (_, i) => {
-      if (i === hoveredCol) return '200px'; // Expanded column
-      return '100px'; // Squeezed columns
+      if (i === hoveredCol) return '300px'; // 3x expanded column
+      return '75px'; // Heavily squeezed columns
     }).join(' ');
     
     const rowSizes = Array.from({ length: 5 }, (_, i) => {
-      if (i === hoveredRow) return '200px'; // Expanded row
-      return '100px'; // Squeezed rows
+      if (i === hoveredRow) return '300px'; // 3x expanded row
+      return '75px'; // Heavily squeezed rows
     }).join(' ');
     
     return {
