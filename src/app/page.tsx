@@ -49,35 +49,42 @@ export default function Home() {
   };
 
   const getSizeClasses = (index: number) => {
-    const baseClasses = "relative overflow-hidden cursor-pointer transition-all duration-300 ease-out";
-    
-    if (hoveredIndex === index) {
-      const { row, col } = getRowCol(index);
-      
-      // Check if we're on the bottom row (row 4) or right column (col 4)
-      const isBottomRow = row === 4;
-      const isRightCol = col === 4;
-      
-      if (isBottomRow && isRightCol) {
-        // Bottom-right corner: expand up and left
-        return `${baseClasses} col-span-2 row-span-2 z-20 col-start-4 row-start-4`;
-      } else if (isBottomRow) {
-        // Bottom row: expand upward
-        return `${baseClasses} col-span-2 row-span-2 z-20 row-start-4`;
-      } else if (isRightCol) {
-        // Right column: expand leftward
-        return `${baseClasses} col-span-2 row-span-2 z-20 col-start-4`;
-      } else {
-        // Normal expansion down and right
-        return `${baseClasses} col-span-2 row-span-2 z-20`;
-      }
-    }
+    // Always maintain 1x1 grid position to keep 5x5 layout stable
+    const baseClasses = "col-span-1 row-span-1 cursor-pointer transition-all duration-300 ease-out";
     
     if (hoveredIndex !== null && hoveredIndex !== index) {
-      return `${baseClasses} col-span-1 row-span-1 opacity-60`;
+      return `${baseClasses} opacity-60`;
     }
 
-    return `${baseClasses} col-span-1 row-span-1`;
+    return baseClasses;
+  };
+
+  const getHoverStyles = (index: number) => {
+    if (hoveredIndex !== index) return {};
+    
+    const { row, col } = getRowCol(index);
+    const isBottomRow = row === 4;
+    const isRightCol = col === 4;
+    
+    // Calculate position to expand within bounds
+    const transform = 'scale(2)';
+    let transformOrigin = 'center';
+    
+    if (isBottomRow && isRightCol) {
+      transformOrigin = 'bottom right';
+    } else if (isBottomRow) {
+      transformOrigin = 'bottom center';
+    } else if (isRightCol) {
+      transformOrigin = 'center right';
+    } else {
+      transformOrigin = 'top left';
+    }
+    
+    return {
+      transform,
+      transformOrigin,
+      zIndex: 20,
+    };
   };
 
   return (
@@ -108,6 +115,7 @@ export default function Home() {
               onMouseEnter={() => setHoveredIndex(index)}
               style={{
                 animationDelay: `${index * 50}ms`,
+                ...getHoverStyles(index),
               }}
             >
               <div className={`
