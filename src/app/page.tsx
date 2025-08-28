@@ -3,31 +3,31 @@
 import { useState, useEffect } from 'react';
 
 const projects = [
-  { id: 1, title: 'Project Alpha', color: 'from-red-500 to-pink-500' },
-  { id: 2, title: 'Project Beta', color: 'from-blue-500 to-cyan-500' },
-  { id: 3, title: 'Project Gamma', color: 'from-green-500 to-teal-500' },
-  { id: 4, title: 'Project Delta', color: 'from-yellow-500 to-orange-500' },
-  { id: 5, title: 'Project Epsilon', color: 'from-purple-500 to-violet-500' },
-  { id: 6, title: 'Project Zeta', color: 'from-indigo-500 to-blue-500' },
-  { id: 7, title: 'Project Eta', color: 'from-teal-500 to-green-500' },
-  { id: 8, title: 'Project Theta', color: 'from-orange-500 to-red-500' },
-  { id: 9, title: 'Project Iota', color: 'from-cyan-500 to-blue-500' },
-  { id: 10, title: 'Project Kappa', color: 'from-lime-500 to-green-500' },
-  { id: 11, title: 'Project Lambda', color: 'from-amber-500 to-yellow-500' },
-  { id: 12, title: 'Project Mu', color: 'from-emerald-500 to-teal-500' },
-  { id: 13, title: 'Project Nu', color: 'from-violet-500 to-purple-500' },
-  { id: 14, title: 'Project Xi', color: 'from-rose-500 to-pink-500' },
-  { id: 15, title: 'Project Omicron', color: 'from-sky-500 to-cyan-500' },
-  { id: 16, title: 'Project Pi', color: 'from-fuchsia-500 to-violet-500' },
-  { id: 17, title: 'Project Rho', color: 'from-slate-500 to-gray-500' },
-  { id: 18, title: 'Project Sigma', color: 'from-zinc-500 to-slate-500' },
-  { id: 19, title: 'Project Tau', color: 'from-neutral-500 to-gray-500' },
-  { id: 20, title: 'Project Phi', color: 'from-pink-500 to-rose-500' },
-  { id: 21, title: 'Project Chi', color: 'from-emerald-400 to-cyan-400' },
-  { id: 22, title: 'Project Psi', color: 'from-violet-400 to-purple-400' },
-  { id: 23, title: 'Project Omega', color: 'from-orange-400 to-red-400' },
-  { id: 24, title: 'Project Beta II', color: 'from-blue-400 to-indigo-400' },
-  { id: 25, title: 'Project Final', color: 'from-rose-400 to-pink-400' }
+  { id: 1, title: 'Project Alpha' },
+  { id: 2, title: 'Project Beta' },
+  { id: 3, title: 'Project Gamma' },
+  { id: 4, title: 'Project Delta' },
+  { id: 5, title: 'Project Epsilon' },
+  { id: 6, title: 'Project Zeta' },
+  { id: 7, title: 'Project Eta' },
+  { id: 8, title: 'Project Theta' },
+  { id: 9, title: 'Project Iota' },
+  { id: 10, title: 'Project Kappa' },
+  { id: 11, title: 'Project Lambda' },
+  { id: 12, title: 'Project Mu' },
+  { id: 13, title: 'Project Nu' },
+  { id: 14, title: 'Project Xi' },
+  { id: 15, title: 'Project Omicron' },
+  { id: 16, title: 'Project Pi' },
+  { id: 17, title: 'Project Rho' },
+  { id: 18, title: 'Project Sigma' },
+  { id: 19, title: 'Project Tau' },
+  { id: 20, title: 'Project Phi' },
+  { id: 21, title: 'Project Chi' },
+  { id: 22, title: 'Project Psi' },
+  { id: 23, title: 'Project Omega' },
+  { id: 24, title: 'Project Beta II' },
+  { id: 25, title: 'Project Final' }
 ];
 
 export default function Home() {
@@ -46,6 +46,18 @@ export default function Home() {
     const row = Math.floor(index / 5);
     const col = index % 5;
     return { row, col };
+  };
+
+  const getChessboardColor = (index: number) => {
+    const { row, col } = getRowCol(index);
+    const isLight = (row + col) % 2 === 0;
+    return isLight ? 'bg-white' : 'bg-gray-800';
+  };
+
+  const getTextColor = (index: number) => {
+    const { row, col } = getRowCol(index);
+    const isLight = (row + col) % 2 === 0;
+    return isLight ? 'text-gray-800' : 'text-white';
   };
 
   const getGridLayout = () => {
@@ -150,26 +162,17 @@ export default function Home() {
               }}
             >
               <div className={`
-                w-full h-full bg-gradient-to-br ${project.color}
-                flex flex-col items-center justify-center
+                w-full h-full ${getChessboardColor(index)}
                 relative group
+                transition-all duration-300 ease-in-out
               `}>
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                 
-                <div className="text-center z-10 p-4">
-                  <div className="text-white font-bold text-lg mb-2">
+                <div className="absolute bottom-2 left-2 z-10">
+                  <div className={`${getTextColor(index)} font-light text-xs tracking-wide opacity-80`}>
                     {project.title}
                   </div>
-                  <div className="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Click to explore
-                  </div>
                 </div>
-
-                <div className="absolute top-2 right-2 text-white/60 text-xs">
-                  #{project.id}
-                </div>
-
-                <div className="absolute inset-0 border-2 border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </div>
           ))}
