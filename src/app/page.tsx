@@ -3,7 +3,14 @@
 import { useState, useEffect } from 'react';
 
 const projects = [
-  { id: 1, title: 'Project Alpha' },
+  { 
+    id: 1, 
+    title: 'The Good Loose Coins',
+    description: 'Social impact platform for micro-donations',
+    url: 'https://thegoodloosecoins.vercel.app/',
+    tech: ['Next.js', 'TypeScript', 'Supabase'],
+    hasPreview: true
+  },
   { id: 2, title: 'Project Beta' },
   { id: 3, title: 'Project Gamma' },
   { id: 4, title: 'Project Delta' },
@@ -166,14 +173,69 @@ export default function Home() {
                 w-full h-full ${getChessboardColor(index)}
                 relative group
                 transition-all duration-300 ease-in-out
+                overflow-hidden
               `}>
+                {/* Preview iframe for projects with hasPreview */}
+                {project.hasPreview && hoveredIndex === index && (
+                  <div className="absolute inset-0 z-20">
+                    <iframe
+                      src={project.url}
+                      className="w-full h-full border-0 rounded-sm"
+                      title={project.title}
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      sandbox="allow-scripts allow-same-origin"
+                      style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}
+                    />
+                    <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                  </div>
+                )}
+
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                 
+                {/* Project info */}
                 <div className="absolute bottom-2 left-2 z-10">
                   <div className={`${getTextColor(index)} font-light text-xs tracking-wide opacity-80`}>
                     {project.title}
                   </div>
+                  {project.description && hoveredIndex === index && (
+                    <div className={`${getTextColor(index)} font-light text-xs opacity-60 mt-1`}>
+                      {project.description}
+                    </div>
+                  )}
                 </div>
+
+                {/* Tech stack indicator */}
+                {project.tech && hoveredIndex === index && (
+                  <div className="absolute top-2 right-2 z-10">
+                    <div className="flex gap-1">
+                      {project.tech.slice(0, 2).map((tech, i) => (
+                        <span
+                          key={i}
+                          className={`${getTextColor(index)} text-xs font-light opacity-50 bg-white/10 px-1 rounded`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Click to open indicator */}
+                {project.url && hoveredIndex === index && (
+                  <div 
+                    className="absolute inset-0 cursor-pointer z-30"
+                    onClick={() => window.open(project.url, '_blank')}
+                    title={`Open ${project.title}`}
+                  >
+                    <div className="absolute bottom-2 right-2">
+                      <div className={`${getTextColor(index)} text-xs opacity-60`}>
+                        ↗
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
