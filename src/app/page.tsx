@@ -94,24 +94,51 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-white text-center mb-8">
-          Cherwin&apos;s Portfolio
-        </h1>
-        
-        <div 
-          className={`
-            grid gap-0
-            transition-all duration-300 ease-in-out
-            ${isAnimating ? 'animate-pulse' : ''}
-            border-4 border-slate-700 overflow-hidden
-          `}
-          style={{ 
-            ...getGridLayout()
-          }}
-          onMouseLeave={() => setHoveredIndex(null)}
-        >
+    <div className="min-h-screen bg-surface">
+      {/* Material 3 Header */}
+      <header className="w-full bg-surface-container shadow-sm border-b border-outline-variant">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-medium text-on-surface tracking-tight">
+              Cherwin
+            </h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button className="px-6 py-2 bg-primary text-on-primary rounded-full font-medium text-sm hover:shadow-md transition-all duration-200 hover:bg-primary-container hover:text-on-primary-container">
+              CV
+            </button>
+            <button className="px-6 py-2 bg-secondary text-on-secondary rounded-full font-medium text-sm hover:shadow-md transition-all duration-200 hover:bg-secondary-container hover:text-on-secondary-container">
+              Contact Me
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-8">
+          <div className="text-center">
+            <h2 className="text-4xl font-light text-on-surface mb-2">
+              Portfolio
+            </h2>
+            <p className="text-lg text-on-surface-variant">
+              Explore my projects
+            </p>
+          </div>
+          
+          <div 
+            className={`
+              grid gap-0 rounded-3xl overflow-hidden
+              transition-all duration-300 ease-in-out
+              ${isAnimating ? 'animate-pulse' : ''}
+              shadow-lg elevation-2
+            `}
+            style={{ 
+              ...getGridLayout()
+            }}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
           {projects.map((project, index) => (
             <div
               key={project.id}
@@ -146,8 +173,9 @@ export default function Home() {
               </div>
             </div>
           ))}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
