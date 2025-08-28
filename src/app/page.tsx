@@ -48,68 +48,42 @@ export default function Home() {
     return { row, col };
   };
 
-  const getSizeClasses = () => {
-    return "col-span-1 row-span-1 cursor-pointer transition-all duration-300 ease-out";
-  };
-
-  const getBoxStyles = (index: number) => {
-    const { row, col } = getRowCol(index);
-    
+  const getGridTemplate = () => {
     if (hoveredIndex === null) {
       return {
-        transform: 'scale(1)',
-        transformOrigin: 'center',
-        zIndex: 1,
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateRows: 'repeat(5, 1fr)',
       };
     }
 
-    if (hoveredIndex === index) {
-      // Expanded box
-      const isBottomRow = row === 4;
-      const isRightCol = col === 4;
-      
-      let transformOrigin = 'center';
-      if (isBottomRow && isRightCol) {
-        transformOrigin = 'bottom right';
-      } else if (isBottomRow) {
-        transformOrigin = 'bottom center';
-      } else if (isRightCol) {
-        transformOrigin = 'center right';
-      } else {
-        transformOrigin = 'top left';
-      }
-      
-      return {
-        transform: 'scale(2)',
-        transformOrigin,
-        zIndex: 20,
-      };
-    }
-
-    // Non-hovered boxes - calculate squeeze effect
-    const hoveredPos = getRowCol(hoveredIndex);
-    const distanceFromHover = Math.abs(row - hoveredPos.row) + Math.abs(col - hoveredPos.col);
+    const { row: hoveredRow, col: hoveredCol } = getRowCol(hoveredIndex);
     
-    // Boxes closer to the hovered box get squeezed more
-    const maxDistance = 8; // Max possible distance in 5x5 grid
-    const squeezeIntensity = Math.max(0.3, 1 - (distanceFromHover / maxDistance) * 0.4);
+    // Create dynamic grid template with expanded box taking more space
+    const colTemplate = Array.from({ length: 5 }, (_, i) => {
+      if (i === hoveredCol) return '2fr'; // Expanded column
+      return '0.5fr'; // Squeezed columns
+    }).join(' ');
     
-    // Calculate push direction away from hovered box
-    const pushX = col === hoveredPos.col ? 0 : (col > hoveredPos.col ? 8 : -8);
-    const pushY = row === hoveredPos.row ? 0 : (row > hoveredPos.row ? 8 : -8);
-    
-    // Reduce push for boxes at edges to keep them in bounds
-    const edgeFactorX = col === 0 || col === 4 ? 0.5 : 1;
-    const edgeFactorY = row === 0 || row === 4 ? 0.5 : 1;
-    
-    const finalPushX = pushX * edgeFactorX;
-    const finalPushY = pushY * edgeFactorY;
+    const rowTemplate = Array.from({ length: 5 }, (_, i) => {
+      if (i === hoveredRow) return '2fr'; // Expanded row
+      return '0.5fr'; // Squeezed rows
+    }).join(' ');
     
     return {
-      transform: `scale(${squeezeIntensity}) translate(${finalPushX}px, ${finalPushY}px)`,
-      transformOrigin: 'center',
-      zIndex: 1,
-      opacity: 0.7,
+      gridTemplateColumns: colTemplate,
+      gridTemplateRows: rowTemplate,
+    };
+  };
+
+  const getSizeClasses = (index: number) => {
+    return `cursor-pointer transition-all duration-300 ease-out opacity-${hoveredIndex !== null && hoveredIndex !== index ? '70' : '100'}`;
+  };
+
+  const getGridPosition = (index: number) => {
+    const { row, col } = getRowCol(index);
+    return {
+      gridColumn: col + 1,
+      gridRow: row + 1,
     };
   };
 
@@ -122,7 +96,7 @@ export default function Home() {
         
         <div 
           className={`
-            grid grid-cols-5 grid-rows-5 gap-0
+            grid gap-0
             transition-all duration-300 ease-in-out
             ${isAnimating ? 'animate-pulse' : ''}
             border-4 border-slate-700 overflow-hidden
@@ -130,18 +104,19 @@ export default function Home() {
           style={{ 
             width: '600px', 
             height: '600px',
-            aspectRatio: '1/1'
+            aspectRatio: '1/1',
+            ...getGridTemplate()
           }}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className={getSizeClasses()}
+              className={getSizeClasses(index)}
               onMouseEnter={() => setHoveredIndex(index)}
               style={{
                 animationDelay: `${index * 50}ms`,
-                ...getBoxStyles(index),
+                ...getGridPosition(index),
               }}
             >
               <div className={`
