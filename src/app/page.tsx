@@ -6,10 +6,12 @@ const projects = [
   { 
     id: 1, 
     title: 'The Good Loose Coins',
-    description: 'Social impact platform for micro-donations',
+    description: 'Social impact platform transforming spare change into community support',
     url: 'https://thegoodloosecoins.vercel.app/',
     tech: ['Next.js', 'TypeScript', 'Supabase'],
-    hasPreview: true
+    features: ['Micro-donations', 'Community Impact', 'Education Support'],
+    hasPreview: true,
+    videoPreview: '/projects/thegoodloosecoins.mov'
   },
   { id: 2, title: 'Project Beta' },
   { id: 3, title: 'Project Gamma' },
@@ -175,19 +177,27 @@ export default function Home() {
                 transition-all duration-300 ease-in-out
                 overflow-hidden
               `}>
-                {/* Preview iframe for projects with hasPreview */}
-                {project.hasPreview && hoveredIndex === index && (
-                  <div className="absolute inset-0 z-20">
-                    <iframe
-                      src={project.url}
-                      className="w-full h-full border-0 rounded-sm"
-                      title={project.title}
-                      loading="lazy"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      sandbox="allow-scripts allow-same-origin"
-                      style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}
+                {/* Video preview for projects with hasPreview */}
+                {project.hasPreview && project.videoPreview && hoveredIndex === index && (
+                  <div className="absolute inset-0 z-20 overflow-hidden">
+                    <video
+                      src={project.videoPreview}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      onError={(e) => console.log('Video failed to load:', e)}
                     />
-                    <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                    
+                    {/* Overlay with project info */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                    
+                    {/* Project title overlay */}
+                    <div className="absolute bottom-4 left-4 text-white z-10">
+                      <div className="text-lg font-medium">{project.title}</div>
+                      <div className="text-xs opacity-80 mt-1">Click to explore live site ↗</div>
+                    </div>
                   </div>
                 )}
 
