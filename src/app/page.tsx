@@ -48,16 +48,12 @@ export default function Home() {
     return { row, col };
   };
 
-  const getChessboardColor = (index: number) => {
-    const { row, col } = getRowCol(index);
-    const isLight = (row + col) % 2 === 0;
-    return isLight ? 'bg-white' : 'bg-gray-800';
+  const getBoxColor = () => {
+    return 'bg-gray-800';
   };
 
-  const getTextColor = (index: number) => {
-    const { row, col } = getRowCol(index);
-    const isLight = (row + col) % 2 === 0;
-    return isLight ? 'text-gray-800' : 'text-white';
+  const getTextColor = () => {
+    return 'text-white';
   };
 
   const getGridLayout = () => {
@@ -108,39 +104,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-surface">
-      {/* Material 3 Header */}
-      <header className="w-full bg-surface-container shadow-sm border-b border-outline-variant">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <h1 className="text-2xl font-medium text-on-surface tracking-tight">
-              Cherwin
-            </h1>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <button className="px-6 py-2 bg-primary text-on-primary rounded-full font-medium text-sm hover:shadow-md transition-all duration-200 hover:bg-primary-container hover:text-on-primary-container">
-              CV
-            </button>
-            <button className="px-6 py-2 bg-secondary text-on-secondary rounded-full font-medium text-sm hover:shadow-md transition-all duration-200 hover:bg-secondary-container hover:text-on-secondary-container">
-              Contact Me
-            </button>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center p-8">
-        <div className="flex flex-col items-center gap-8">
-          <div className="text-center">
-            <h2 className="text-4xl font-light text-on-surface mb-2">
-              Portfolio
-            </h2>
-            <p className="text-lg text-on-surface-variant">
-              Explore my projects
-            </p>
-          </div>
-          
-          <div className="flex items-center justify-between w-full max-w-6xl">
+      <main className="flex items-center justify-center min-h-screen p-8">
+        <div className="flex items-center justify-between w-full h-full">
+          <div className="w-3/4 flex items-center justify-center">
             <div 
               className={`
                 grid gap-0 overflow-hidden
@@ -164,10 +131,11 @@ export default function Home() {
                 }}
               >
                 <div className={`
-                  w-full h-full ${getChessboardColor(index)}
+                  w-full h-full ${getBoxColor()}
                   relative group
                   transition-all duration-300 ease-in-out
                   overflow-hidden
+                  border border-orange-500
                 `}>
                   {/* Video preview for projects with hasPreview */}
                   {project.hasPreview && project.videoPreview && hoveredIndex === index && (
@@ -198,11 +166,11 @@ export default function Home() {
                   
                   {/* Project info */}
                   <div className="absolute bottom-2 left-2 z-10">
-                    <div className={`${getTextColor(index)} font-light text-xs tracking-wide opacity-80`}>
+                    <div className={`${getTextColor()} font-light text-xs tracking-wide opacity-80`}>
                       {project.title}
                     </div>
                     {project.description && hoveredIndex === index && (
-                      <div className={`${getTextColor(index)} font-light text-xs opacity-60 mt-1`}>
+                      <div className={`${getTextColor()} font-light text-xs opacity-60 mt-1`}>
                         {project.description}
                       </div>
                     )}
@@ -215,7 +183,7 @@ export default function Home() {
                         {project.tech.slice(0, 2).map((tech, i) => (
                           <span
                             key={i}
-                            className={`${getTextColor(index)} text-xs font-light opacity-50 bg-white/10 px-1 rounded`}
+                            className={`${getTextColor()} text-xs font-light opacity-50 bg-white/10 px-1 rounded`}
                           >
                             {tech}
                           </span>
@@ -232,7 +200,7 @@ export default function Home() {
                       title={`Open ${project.title}`}
                     >
                       <div className="absolute bottom-2 right-2">
-                        <div className={`${getTextColor(index)} text-xs opacity-60`}>
+                        <div className={`${getTextColor()} text-xs opacity-60`}>
                           ↗
                         </div>
                       </div>
@@ -242,12 +210,12 @@ export default function Home() {
               </div>
             ))}
             </div>
-            
-            <div className="flex items-center justify-center ml-16">
-              <h1 className="text-[50px] font-thin text-on-surface tracking-wide">
-                Cherwin Fernandez
-              </h1>
-            </div>
+          </div>
+          
+          <div className="w-1/4 flex items-center justify-center">
+            <h1 className="text-[40px] font-thin text-on-surface tracking-wide">
+              Cherwin Fernandez
+            </h1>
           </div>
         </div>
       </main>
