@@ -28,15 +28,6 @@ const projects = [
   { id: 14, title: 'Project Xi' },
   { id: 15, title: 'Project Omicron' },
   { id: 16, title: 'Project Pi' },
-  { id: 17, title: 'Project Rho' },
-  { id: 18, title: 'Project Sigma' },
-  { id: 19, title: 'Project Tau' },
-  { id: 20, title: 'Project Phi' },
-  { id: 21, title: 'Project Chi' },
-  { id: 22, title: 'Project Psi' },
-  { id: 23, title: 'Project Omega' },
-  { id: 24, title: 'Project Beta II' },
-  { id: 25, title: 'Project Final' }
 ];
 
 export default function Home() {
@@ -52,8 +43,8 @@ export default function Home() {
   }, []);
 
   const getRowCol = (index: number) => {
-    const row = Math.floor(index / 5);
-    const col = index % 5;
+    const row = Math.floor(index / 4);
+    const col = index % 4;
     return { row, col };
   };
 
@@ -72,23 +63,23 @@ export default function Home() {
   const getGridLayout = () => {
     if (hoveredIndex === null) {
       return {
-        gridTemplateColumns: 'repeat(5, 120px)',
-        gridTemplateRows: 'repeat(5, 120px)',
+        gridTemplateColumns: 'repeat(4, 120px)',
+        gridTemplateRows: 'repeat(4, 120px)',
       };
     }
 
     const { row: hoveredRow, col: hoveredCol } = getRowCol(hoveredIndex);
     
     // For 3x3 expansion, we need to allocate more space
-    // Total space: 600px, expanded box takes 300px, remaining 4 boxes get 75px each
-    const colSizes = Array.from({ length: 5 }, (_, i) => {
-      if (i === hoveredCol) return '300px'; // 3x expanded column
-      return '75px'; // Heavily squeezed columns
+    // Total space: 480px, expanded box takes 240px, remaining 3 boxes get 80px each
+    const colSizes = Array.from({ length: 4 }, (_, i) => {
+      if (i === hoveredCol) return '240px'; // 3x expanded column
+      return '80px'; // Squeezed columns
     }).join(' ');
     
-    const rowSizes = Array.from({ length: 5 }, (_, i) => {
-      if (i === hoveredRow) return '300px'; // 3x expanded row
-      return '75px'; // Heavily squeezed rows
+    const rowSizes = Array.from({ length: 4 }, (_, i) => {
+      if (i === hoveredRow) return '240px'; // 3x expanded row
+      return '80px'; // Squeezed rows
     }).join(' ');
     
     return {
@@ -149,106 +140,114 @@ export default function Home() {
             </p>
           </div>
           
-          <div 
-            className={`
-              grid gap-0 overflow-hidden
-              transition-all duration-300 ease-in-out
-              ${isAnimating ? 'animate-pulse' : ''}
-              shadow-lg elevation-2
-            `}
-            style={{ 
-              ...getGridLayout()
-            }}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-          {projects.map((project, index) => (
-            <div
-              key={project.id}
-              className={getSizeClasses(index)}
-              onMouseEnter={() => setHoveredIndex(index)}
-              style={{
-                animationDelay: `${index * 50}ms`,
-                ...getGridPosition(index),
-              }}
-            >
-              <div className={`
-                w-full h-full ${getChessboardColor(index)}
-                relative group
+          <div className="flex items-center justify-between w-full max-w-6xl">
+            <div 
+              className={`
+                grid gap-0 overflow-hidden
                 transition-all duration-300 ease-in-out
-                overflow-hidden
-              `}>
-                {/* Video preview for projects with hasPreview */}
-                {project.hasPreview && project.videoPreview && hoveredIndex === index && (
-                  <div className="absolute inset-0 z-20 overflow-hidden">
-                    <video
-                      src={project.videoPreview}
-                      className="w-full h-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      onError={(e) => console.log('Video failed to load:', e)}
-                    />
-                    
-                    {/* Overlay with project info */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                    
-                    {/* Project title overlay */}
-                    <div className="absolute bottom-4 left-4 text-white z-10">
-                      <div className="text-lg font-medium">{project.title}</div>
-                      <div className="text-xs opacity-80 mt-1">Click to explore live site ↗</div>
+                ${isAnimating ? 'animate-pulse' : ''}
+                shadow-lg elevation-2
+              `}
+              style={{ 
+                ...getGridLayout()
+              }}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+            {projects.slice(0, 16).map((project, index) => (
+              <div
+                key={project.id}
+                className={getSizeClasses(index)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  ...getGridPosition(index),
+                }}
+              >
+                <div className={`
+                  w-full h-full ${getChessboardColor(index)}
+                  relative group
+                  transition-all duration-300 ease-in-out
+                  overflow-hidden
+                `}>
+                  {/* Video preview for projects with hasPreview */}
+                  {project.hasPreview && project.videoPreview && hoveredIndex === index && (
+                    <div className="absolute inset-0 z-20 overflow-hidden">
+                      <video
+                        src={project.videoPreview}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        onError={(e) => console.log('Video failed to load:', e)}
+                      />
+                      
+                      {/* Overlay with project info */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                      
+                      {/* Project title overlay */}
+                      <div className="absolute bottom-4 left-4 text-white z-10">
+                        <div className="text-lg font-medium">{project.title}</div>
+                        <div className="text-xs opacity-80 mt-1">Click to explore live site ↗</div>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                
-                {/* Project info */}
-                <div className="absolute bottom-2 left-2 z-10">
-                  <div className={`${getTextColor(index)} font-light text-xs tracking-wide opacity-80`}>
-                    {project.title}
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                  
+                  {/* Project info */}
+                  <div className="absolute bottom-2 left-2 z-10">
+                    <div className={`${getTextColor(index)} font-light text-xs tracking-wide opacity-80`}>
+                      {project.title}
+                    </div>
+                    {project.description && hoveredIndex === index && (
+                      <div className={`${getTextColor(index)} font-light text-xs opacity-60 mt-1`}>
+                        {project.description}
+                      </div>
+                    )}
                   </div>
-                  {project.description && hoveredIndex === index && (
-                    <div className={`${getTextColor(index)} font-light text-xs opacity-60 mt-1`}>
-                      {project.description}
+
+                  {/* Tech stack indicator */}
+                  {project.tech && hoveredIndex === index && (
+                    <div className="absolute top-2 right-2 z-10">
+                      <div className="flex gap-1">
+                        {project.tech.slice(0, 2).map((tech, i) => (
+                          <span
+                            key={i}
+                            className={`${getTextColor(index)} text-xs font-light opacity-50 bg-white/10 px-1 rounded`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Click to open indicator */}
+                  {project.url && hoveredIndex === index && (
+                    <div 
+                      className="absolute inset-0 cursor-pointer z-30"
+                      onClick={() => window.open(project.url, '_blank')}
+                      title={`Open ${project.title}`}
+                    >
+                      <div className="absolute bottom-2 right-2">
+                        <div className={`${getTextColor(index)} text-xs opacity-60`}>
+                          ↗
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
-
-                {/* Tech stack indicator */}
-                {project.tech && hoveredIndex === index && (
-                  <div className="absolute top-2 right-2 z-10">
-                    <div className="flex gap-1">
-                      {project.tech.slice(0, 2).map((tech, i) => (
-                        <span
-                          key={i}
-                          className={`${getTextColor(index)} text-xs font-light opacity-50 bg-white/10 px-1 rounded`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Click to open indicator */}
-                {project.url && hoveredIndex === index && (
-                  <div 
-                    className="absolute inset-0 cursor-pointer z-30"
-                    onClick={() => window.open(project.url, '_blank')}
-                    title={`Open ${project.title}`}
-                  >
-                    <div className="absolute bottom-2 right-2">
-                      <div className={`${getTextColor(index)} text-xs opacity-60`}>
-                        ↗
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
+            ))}
             </div>
-          ))}
+            
+            <div className="flex items-center justify-center ml-16">
+              <h1 className="text-[50px] font-thin text-on-surface tracking-wide">
+                Cherwin Fernandez
+              </h1>
+            </div>
           </div>
         </div>
       </main>
