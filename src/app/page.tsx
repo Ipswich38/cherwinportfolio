@@ -103,9 +103,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-gradient-to-br from-surface via-surface to-surface-container">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02] bg-gradient-to-r from-transparent via-green-500/10 to-transparent"></div>
+      
       {/* Main Content */}
-      <main className="flex items-center justify-center min-h-screen p-8">
+      <main className="flex items-center justify-center min-h-screen p-8 relative z-10">
         <div className="flex items-center justify-between w-full h-full">
           <div className="w-3/4 flex items-center justify-center">
             <div 
@@ -113,7 +116,9 @@ export default function Home() {
                 grid gap-0 overflow-hidden
                 transition-all duration-300 ease-in-out
                 ${isAnimating ? 'animate-pulse' : ''}
-                shadow-lg elevation-2
+                shadow-2xl elevation-3 rounded-lg
+                ring-1 ring-green-500/10
+                backdrop-blur-sm
               `}
               style={{ 
                 ...getGridLayout()
@@ -135,7 +140,7 @@ export default function Home() {
                   relative group
                   transition-all duration-300 ease-in-out
                   overflow-hidden
-                  border-[0.5px] border-orange-500
+                  border-[0.5px] border-green-500
                 `}>
                   {/* Video preview for projects with hasPreview */}
                   {project.hasPreview && project.videoPreview && (
@@ -212,10 +217,41 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="w-1/4 flex items-center justify-center">
-            <h1 className="text-[40px] font-thin text-on-surface tracking-wide">
-              Cherwin Fernandez
-            </h1>
+          <div className="w-1/4 flex flex-col items-center justify-center space-y-8">
+            <div className="text-center">
+              <h1 className="text-[44px] font-thin text-on-surface tracking-wide mb-2">
+                Cherwin Fernandez
+              </h1>
+              <p className="text-sm text-on-surface/70 font-light tracking-wide">
+                Full Stack Developer & UI/UX Designer
+              </p>
+            </div>
+            
+            <div className="flex flex-col space-y-3 w-full max-w-[200px]">
+              <button className="
+                bg-green-600 hover:bg-green-700 
+                text-white font-medium text-sm
+                px-6 py-3 rounded-lg
+                transition-all duration-200 ease-out
+                hover:shadow-lg hover:scale-[1.02]
+                active:scale-[0.98]
+                border border-green-500
+              ">
+                Download CV
+              </button>
+              
+              <button className="
+                bg-transparent hover:bg-green-50 dark:hover:bg-green-950/20
+                text-green-600 dark:text-green-400 font-medium text-sm
+                px-6 py-3 rounded-lg
+                transition-all duration-200 ease-out
+                hover:shadow-md hover:scale-[1.02]
+                active:scale-[0.98]
+                border border-green-500 hover:border-green-600
+              ">
+                Contact Me
+              </button>
+            </div>
           </div>
         </div>
       </main>
