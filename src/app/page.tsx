@@ -59,23 +59,23 @@ export default function Home() {
   const getGridLayout = () => {
     if (hoveredIndex === null) {
       return {
-        gridTemplateColumns: 'repeat(4, 120px)',
-        gridTemplateRows: 'repeat(4, 120px)',
+        gridTemplateColumns: 'repeat(4, 180px)',
+        gridTemplateRows: 'repeat(4, 180px)',
       };
     }
 
     const { row: hoveredRow, col: hoveredCol } = getRowCol(hoveredIndex);
     
     // For 3x3 expansion, we need to allocate more space
-    // Total space: 480px, expanded box takes 240px, remaining 3 boxes get 80px each
+    // Total space: 720px, expanded box takes 360px, remaining 3 boxes get 120px each
     const colSizes = Array.from({ length: 4 }, (_, i) => {
-      if (i === hoveredCol) return '240px'; // 3x expanded column
-      return '80px'; // Squeezed columns
+      if (i === hoveredCol) return '360px'; // 3x expanded column
+      return '120px'; // Squeezed columns
     }).join(' ');
     
     const rowSizes = Array.from({ length: 4 }, (_, i) => {
-      if (i === hoveredRow) return '240px'; // 3x expanded row
-      return '80px'; // Squeezed rows
+      if (i === hoveredRow) return '360px'; // 3x expanded row
+      return '120px'; // Squeezed rows
     }).join(' ');
     
     return {
