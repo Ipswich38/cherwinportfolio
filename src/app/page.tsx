@@ -138,7 +138,7 @@ export default function Home() {
                   border-[0.5px] border-orange-500
                 `}>
                   {/* Video preview for projects with hasPreview */}
-                  {project.hasPreview && project.videoPreview && hoveredIndex === index && (
+                  {project.hasPreview && project.videoPreview && (
                     <div className="absolute inset-0 z-20 overflow-hidden">
                       <video
                         src={project.videoPreview}
