@@ -135,7 +135,7 @@ export default function Home() {
                   relative group
                   transition-all duration-300 ease-in-out
                   overflow-hidden
-                  border border-orange-500
+                  border-[0.5px] border-orange-500
                 `}>
                   {/* Video preview for projects with hasPreview */}
                   {project.hasPreview && project.videoPreview && hoveredIndex === index && (
