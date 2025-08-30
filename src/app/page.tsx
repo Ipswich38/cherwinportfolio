@@ -49,7 +49,7 @@ export default function Home() {
   };
 
   const getBoxColor = () => {
-    return 'bg-gray-800';
+    return 'bg-black';
   };
 
   const getTextColor = () => {
